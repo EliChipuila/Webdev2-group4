@@ -21,6 +21,26 @@ We were tasked to design and implement a web-based coursework scheduling applica
 •	Coursework projects can be edited.
 •	A listing of all incomplete courseworks and their milestones.
 
+## Programming Languages
+
+  * Java
+  * Java Servlets
+  * JSP
+  * Bootstrap4
+  * Java Script
+  * HTML
+  * Bower
+ 
+ ## Tools and Database
+ 
+ ** Maven
+ ** MySQL
+ ** Git
+ ** Intellij
+ ** Eclipse
+ ** TomCat
+  
+
 
 
 
