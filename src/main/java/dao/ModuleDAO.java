@@ -5,11 +5,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import db.MysqlCon;
 import model.Module;
 
 public class ModuleDAO {
-private MysqlCon msCon;
+	private MysqlCon msCon;
 	
 	public ModuleDAO() {
 		msCon = new MysqlCon("webdevcw", "root", "");
@@ -36,31 +38,43 @@ private MysqlCon msCon;
 		return true;
 	}
 	
-	public ArrayList<Module> getModules(){
+	public boolean updateModule(Module module) {
+		try {
+			
+			String sql = "UPDATE modules SET name='"+module.getName()+"', description='"+module.getDescription()+"' WHERE id='"+module.getId()+"'";
+		    PreparedStatement pstmt = msCon.getPreparedStatement(sql);
+		    
+            pstmt.executeUpdate();	    
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}finally {
+//			msCon.close();
+		}
+		
+		return true;
+	}
+	
+	public ArrayList<Module> getModules(int user_id){
 		ArrayList<Module> modules = new ArrayList<Module>();
-		Module module;
+		Module module = null;
+		
 		
 		try {
-    		String sql = "SELECT * FROM modules";
-    		
+    		String sql = "SELECT * FROM modules WHERE user_id='"+user_id+"' ORDER BY id DESC";
 		    Statement statement = msCon.getStatement();
 		    ResultSet results = statement.executeQuery(sql);
-		    module = new Module();
-		    
-		    results.first();
 		    
 		    while (results.next()) {
-		      module.setName(results.getString("name"));
-		      module.setDescription(results.getString("description"));
-		      module.setId(results.getInt("id"));
-		      module.setStatus_id(results.getInt("status_id"));
-		    }
-		    
-		    modules.add(module);
-		    
-		    for(Module mod : modules)
-			    System.out.println(mod.toString());
-		    
+				module = new Module();
+				
+				module.setName(results.getString("name"));
+				module.setDescription(results.getString("description"));
+				module.setId(results.getInt("id"));
+				module.setStatus_id(results.getInt("status_id"));
+				
+				modules.add(module);
+		    }		    
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -68,4 +82,28 @@ private MysqlCon msCon;
 		
 		return modules;
 	}
+	
+	public Module getModule(int id) {
+		Module module;
+		
+		try {
+    		String sql = "SELECT * FROM users WHERE id='"+id+"'";
+		    Statement statement = msCon.getStatement();
+		    
+		    ResultSet results = statement.executeQuery(sql);
+		    module = new Module();
+		    
+		    while (results.next()) {
+		      module.setName(results.getString("name"));
+		      module.setDescription(results.getString("description"));
+		      module.setId(results.getInt("id"));
+		      module.setStatus_id(results.getInt("status_id"));
+		    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return module;
+	}					
 }
