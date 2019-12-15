@@ -3,7 +3,9 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+            <a class="nav-link" data-widget="pushmenu" href="#">
+                <i class="fas fa-bars"></i>
+            </a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="index3.html" class="nav-link">Home</a>
@@ -15,10 +17,10 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-        
+
         <li class="nav-item">
             <a class="nav-link" data-toggle="dropdown" href="#">
-            	<b>Logout</b>
+                <b>Logout</b>
                 <i class="ml-1 fa fa-power-off"></i>
             </a>
         </li>

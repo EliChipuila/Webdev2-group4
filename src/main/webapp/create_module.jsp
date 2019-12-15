@@ -54,7 +54,6 @@
 				                    	
 				                    	<%! Operations operation = Operations.CREATE; %>
 				                    	
-				                    	<input type="hidden" class="form-control" name="id" id="id" value="${user.id}">
 				                    	<input type="hidden" class="form-control" name="operation" id="operation" value="<%= operation.ordinal() %>">
 				                  		
 				                    	<div class="form-group row">
@@ -81,7 +80,7 @@
 	          </div>
 	          <div class="col-md-4">
 	          	<div class="card card-default">
-				    <div class="card-header">
+				    <div class="card-header mb-1">
 				        <h3 class="card-title">
 				            <i class="fa fa-book"></i>
 				            Modules
@@ -90,19 +89,72 @@
 				    <!-- /.card-header -->
 				    	
 				    	<% ArrayList<Module> modules = (ArrayList<Module>) session.getAttribute("modules"); %>
-				    	<%= modules.toString() %>
-				    	
-				    	
+										    	
 				    	<c:forEach var="module" items="${modules}">
-				    		<div class="card-body">
+				    		<div class="card-body pb-0 pt-1">
 					    		<div class="callout callout-danger">
-						            <h5>${module.name}</h5>
-						            <p>
-						            	${module.description}
-						            </p>
+						            <h5><b>${module.name}</b></h5>
+						            <p>${module.description}</p>
+						            
+						            <div style="display: block; position: relative;">
+							            <div class="btn-group btn-group-sm pull-right" style="float: right; clear: both; bottom: 16px;">
+					                        
+					                        <div class="modal fade" id="edit-modal-sm${module.id}">
+										        <div class="modal-dialog">
+										          <div class="modal-content">
+										            <div class="modal-header">
+										              <h4 class="modal-title text-center"><i class="fa fa-edit"></i> Edit Module</h4>
+										              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										                <span aria-hidden="true">&times;</span>
+										              </button>
+										            </div>
+										            <div class="modal-body">
+										              <form class="form-horizontal" action="/module" method="post">
+									                    	<div class="form-group row">
+									                        	<label for="inputName" class="col-sm-3 col-form-label">Name</label>
+									                        	<div class="col-sm-9">
+									                            	<input type="text" class="form-control" name="name" id="inputName" placeholder="Name" value="${module.name}">
+									                        	</div>
+									                    	</div>
+									                    	
+									                    	<input type="hidden" class="form-control" name="id" id="id" value="${module.id}">
+									                    	<input type="hidden" class="form-control" name="operation" id="operation" value="<%= Operations.UPDATE.ordinal() %>">
+									                  		
+									                    	<div class="form-group row">
+									                        	<label for="inputExperience" class="col-sm-3 col-form-label">Description</label>
+									                        	<div class="col-sm-9">
+									                            	<textarea class="form-control" name="description" id="inputExperience" placeholder="Description">${module.description}</textarea>
+									                        	</div>
+									                   	 	</div>
+									                   
+									                    <div class="mt-3 form-group row text-center">
+									                        <div class="col-sm-12">
+									                         	<button type="submit" class="btn btn-info">Update</button>
+									                        	 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+									                        </div>
+									                    </div>
+									                </form>
+										            </div>
+										          </div>
+										          <!-- /.modal-content -->
+										        </div>
+										        <!-- /.modal-dialog -->
+										      </div>
+										      <!-- /.modal -->
+										      
+					                        <a href="#" class="btn btn-info" data-toggle="modal" data-target="#edit-modal-sm${module.id}"><i class="fa fa-edit" style="color: #fff !important"></i></a>
+					                        
+					                        
+					                        
+					                        <a href="#" class="btn btn-danger"><i class="fas fa-trash" style="color: #fff !important"></i></a>
+					                    </div>
+				                    </div>
 						        </div>
+						        
+						        
 					        </div>
 				    	</c:forEach>
+
 				    	
 				    <!-- /.card-body -->
 				</div>
