@@ -7,6 +7,15 @@ public class Module {
 	private int status_id;
 	private int user_id;
 	
+	public Module(int id, String name, String description, int status_id, int user_id) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.status_id = status_id;
+		this.user_id = user_id;
+	}
+	
 	public Module(String name, String description, int status_id, int user_id) {
 		super();
 		this.name = name;
@@ -71,7 +80,4 @@ public class Module {
 		return "Module [id=" + id + ", name=" + name + ", description=" + description + ", status_id=" + status_id
 				+ ", user_id=" + user_id + "]";
 	}
-	
-	
-	
 }
