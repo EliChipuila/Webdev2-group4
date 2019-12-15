@@ -57,7 +57,7 @@
 			</form>
           </li>
           <li class="nav-item pt-2">
-          	<form action="/module" method="post" id="my_form">
+          	<form action="/module" method="post" id="">
 				<!-- Your Form --> 
 				
 				<input type="hidden" name="operation" value="<%= Operations.VIEW.ordinal() %>"> 
@@ -69,7 +69,7 @@
         </ul>
     </li>
     
-            	<li class="nav-item has-treeview menu-closed">
+    <li class="nav-item has-treeview menu-closed">
         <a href="#" class="nav-link">
           <i class="nav-icon fa fa-book"></i>
           <p>
@@ -79,21 +79,21 @@
         </a>
         <ul class="nav nav-treeview ">
           <li class="nav-item pt-2">
-            <form action="/coursework" method="post" id="my_form">
+            <form action="/project" method="get" id="add_project">
 				<!-- Your Form --> 
 				
 				<input type="hidden" name="operation" value="<%= Operations.CREATE.ordinal() %>"> 
-				<a class="pl-3" href="javascript:{}" onclick="document.getElementById('my_form').submit(); return false;"><i class="far fa-circle nav-icon"></i>
-              		<p class="d-inline">add coursework project</p>
+				<a class="pl-3" href="javascript:{}" onclick="document.getElementById('add_project').submit(); return false;"><i class="far fa-circle nav-icon"></i>
+              		<p class="d-inline">add coursework project <%= Operations.CREATE.ordinal() %></p>
               	</a>
 			</form>
           </li>
           <li class="nav-item pt-2">
-            <form action="/coursework" method="post" id="my_form">
+            <form action="/project" method="get" id="view_project">
 				<!-- Your Form --> 
 				
 				<input type="hidden" name="operation" value="<%= Operations.VIEW.ordinal() %>"> 
-				<a class="pl-3" href="javascript:{}" onclick="document.getElementById('my_form').submit(); return false;"><i class="far fa-circle nav-icon"></i>
+				<a class="pl-3" href="javascript:{}" onclick="document.getElementById('view_project').submit(); return false;"><i class="far fa-circle nav-icon"></i>
               		<p class="d-inline">view coursework project</p>
               	</a>
 			</form>
