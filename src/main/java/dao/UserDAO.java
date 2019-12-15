@@ -11,7 +11,7 @@ public class UserDAO {
 	private MysqlCon msCon;
 	
 	public UserDAO() {
-		msCon = new MysqlCon("webdevcw", "root", "");
+		msCon = new MysqlCon("webcw", "root", "");
 	}
 	
 	public boolean registerUser(User user) {
