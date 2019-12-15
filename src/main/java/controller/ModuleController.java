@@ -37,10 +37,7 @@ public class ModuleController extends HttpServlet {
 			response.sendRedirect("/login");
 		}else {
 			int operation = Integer.parseInt(request.getParameter("operation"));
-//	        int id = Integer.parseInt(request.getParameter("id"));
-	        
-	        System.out.println(request.getParameter("id"));
-	        
+			
 	        if(operation == Operations.CREATE.ordinal()) {
 	        	create(request, response);
 	        }else if(operation == Operations.REMOVE.ordinal()) {
@@ -71,7 +68,7 @@ public class ModuleController extends HttpServlet {
 			
 			if(operation == Operations.CREATE.ordinal()) {
 				ModuleDAO moduleDAO = new ModuleDAO();
-		        ArrayList<Module> modules = moduleDAO.getModules();
+		        ArrayList<Module> modules = moduleDAO.getModules(user.id);
 		        
 		        session.setAttribute("modules", modules);
 //		        session.setAttribute("operation", Operations.VIEW);
@@ -89,22 +86,50 @@ public class ModuleController extends HttpServlet {
 	}
 	
 	private void update(HttpServletRequest request, HttpServletResponse response) {
-		
-	}
-	
-	private void create(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session=request.getSession();
+		User user = (User) session.getAttribute("user");
 		
 		String name = request.getParameter("name");
         String description = request.getParameter("description");
-        int id = Integer.parseInt(request.getParameter("id"));
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+        Module module = new Module(id, name, description, 1, user.getId());      
+        ModuleDAO moduleDAO = new ModuleDAO();
+        boolean updated = moduleDAO.updateModule(module);
         
-        Module module = new Module(name, description, 1, id);      
+        ArrayList<Module> modules = moduleDAO.getModules(user.id);
+        
+        session.setAttribute("modules", modules);
+        session.setAttribute("operation", Operations.VIEW);
+        
+        if(updated) {
+        	try {
+				request.getRequestDispatcher("create_module.jsp").forward(request, response);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}else {
+    		JOptionPane.showMessageDialog(null, "Error registering the user try again");
+    	}
+	}
+	
+	private void create(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session=request.getSession();
+		User user = (User) session.getAttribute("user");
+		
+		String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        
+        Module module = new Module(name, description, 1, user.getId());      
         ModuleDAO moduleDAO = new ModuleDAO();
         boolean registered = moduleDAO.registerModule(module);
         
-        HttpSession session=request.getSession();
         
-        ArrayList<Module> modules = moduleDAO.getModules();
+        ArrayList<Module> modules = moduleDAO.getModules(user.id);
         
         session.setAttribute("modules", modules);
         session.setAttribute("operation", Operations.VIEW);

@@ -28,6 +28,13 @@
     	<servlet-name>DashboardController</servlet-name>
     	<servlet-class>controller.DashboardController</servlet-class>
     </servlet>
+    <servlet>
+    	<description>
+    	</description>
+    	<display-name>ProjectController</display-name>
+    	<servlet-name>ProjectController</servlet-name>
+    	<servlet-class>controller.ProjectController</servlet-class>
+    </servlet>
 	
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -40,5 +47,9 @@
     <servlet-mapping>
     	<servlet-name>DashboardController</servlet-name>
     	<url-pattern>/DashboardController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>ProjectController</servlet-name>
+    	<url-pattern>/ProjectController</url-pattern>
     </servlet-mapping>
 </web-app>
