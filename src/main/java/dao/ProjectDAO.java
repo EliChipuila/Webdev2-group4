@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -13,21 +14,22 @@ public class ProjectDAO {
 private MysqlCon msCon;
 	
 	public ProjectDAO() {
-		msCon = new MysqlCon("webdevcw", "root", "");
+		msCon = new MysqlCon("webcw", "root", "");
 	}
 	
 	public boolean registerProject(Project project) {
 		try {
-    		String sql = "INSERT INTO projects(name, completed, status_id, modules_id, completionDate, intendedDate, description) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    		String sql = "INSERT INTO projects(name, completed, status_id, modules_id, completionDate, intendedDate, description, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 		    PreparedStatement pstmt = msCon.getPreparedStatement(sql);
 		    
             pstmt.setString(1, project.getName());
             pstmt.setInt(2, project.getCompleted());
             pstmt.setInt(3, project.getStatus_id());
             pstmt.setInt(4, project.getModules_id());
-            pstmt.setString(5, project.getCompletionDate());
-            pstmt.setString(6, project.getIntendedDate());
+            pstmt.setDate(5, (Date) project.getCompletionDate());
+            pstmt.setDate(6, (Date) project.getIntendedDate());
             pstmt.setString(7, project.getDescription());
+            pstmt.setInt(8, project.getUser_id());
             
             pstmt.executeUpdate();	    
 		} catch (Exception e) {
@@ -45,7 +47,7 @@ private MysqlCon msCon;
 		Project project = null;
 		
 		try {
-    		String sql = "SELECT * FROM projects WHERE modules_id='"+modules_id+"'";
+    		String sql = "SELECT * FROM projects WHERE modules_id='"+modules_id+"' ORDER BY id DESC";
     		
 		    Statement statement = msCon.getStatement();
 		    ResultSet results = statement.executeQuery(sql);
@@ -58,8 +60,8 @@ private MysqlCon msCon;
 				project.setId(results.getInt("id"));
 				project.setStatus_id(results.getInt("status_id"));
 				project.setModules_id(results.getInt("modules_id"));
-				project.setCompletionDate(results.getString("completionDate"));
-				project.setIntendedDate(results.getString("intendedDate"));
+				project.setCompletionDate(results.getDate("completionDate"));
+				project.setIntendedDate(results.getDate("intendedDate"));
 				project.setDescription(results.getString("description"));
 				
 				projects.add(project);
@@ -78,7 +80,7 @@ private MysqlCon msCon;
 		Project project = null;
 		
 		try {
-    		String sql = "SELECT * FROM projects WHERE user_id='"+user_id+"'";
+    		String sql = "SELECT * FROM projects WHERE user_id='"+user_id+"' ORDER BY id DESC";
     		
 		    Statement statement = msCon.getStatement();
 		    ResultSet results = statement.executeQuery(sql);
@@ -91,9 +93,9 @@ private MysqlCon msCon;
 				project.setId(results.getInt("id"));
 				project.setStatus_id(results.getInt("status_id"));
 				project.setModules_id(results.getInt("modules_id"));
-				project.setCompletionDate(results.getString("completionDate"));
-				project.setIntendedDate(results.getString("intendedDate"));
-				project.setIntendedDate(results.getString("description"));
+				project.setCompletionDate(results.getDate("completionDate"));
+				project.setIntendedDate(results.getDate("intendedDate"));
+				project.setDescription(results.getString("description"));
 				
 				projects.add(project);
 		    }
@@ -113,13 +115,12 @@ private MysqlCon msCon;
 			PreparedStatement pstmt = msCon.getPreparedStatement(sql);
 		    
 		    pstmt.setString(1, project.getName());
-		    pstmt.setString(2, project.getCompletionDate());
-		    pstmt.setString(3, project.getIntendedDate());
+		    pstmt.setDate(2, (Date) project.getCompletionDate());
+		    pstmt.setDate(3, (Date) project.getIntendedDate());
             pstmt.setInt(4, project.getCompleted());
             pstmt.setInt(5, project.getModules_id());
-            pstmt.setString(5, project.getDescription());
-            
-            pstmt.setInt(6, project.getId());
+            pstmt.setString(6, project.getDescription());
+            pstmt.setInt(7, project.getId());
 		    
             pstmt.executeUpdate();	    
 		} catch (Exception e) {
@@ -148,8 +149,8 @@ private MysqlCon msCon;
 				project.setId(results.getInt("id"));
 				project.setStatus_id(results.getInt("status_id"));
 				project.setModules_id(results.getInt("modules_id"));
-				project.setCompletionDate(results.getString("completionDate"));
-				project.setIntendedDate(results.getString("intendedDate"));
+				project.setCompletionDate(results.getDate("completionDate"));
+				project.setIntendedDate(results.getDate("intendedDate"));
 				project.setDescription(results.getString("description"));
 		    }
 		} catch (Exception e) {
@@ -158,5 +159,99 @@ private MysqlCon msCon;
 		}
 		
 		return project;
+	}
+
+	public boolean removeProject(Project project) {
+		String sql = "DELETE FROM projects WHERE id = ?";
+		
+		try {
+		    PreparedStatement pstmt = msCon.getPreparedStatement(sql);
+	        pstmt.setInt(1, project.getId());
+	        
+            pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}finally {}
+	    
+		return true;
+	}
+	
+	public ArrayList<Project> getProjectsByModuleId(int modules_id){
+		ArrayList<Project> projects = new ArrayList<Project>();
+		Project project = null;
+		
+		try {
+    		String sql = "SELECT * FROM projects WHERE modules_id='"+modules_id+"' ORDER BY id DESC";
+    		
+		    Statement statement = msCon.getStatement();
+		    ResultSet results = statement.executeQuery(sql);
+		    
+		    while (results.next()) {
+		    	project = new Project();
+		    	
+				project.setName(results.getString("name"));
+				project.setCompleted(Integer.parseInt(results.getString("completed")));
+				project.setId(results.getInt("id"));
+				project.setStatus_id(results.getInt("status_id"));
+				project.setModules_id(results.getInt("modules_id"));
+				project.setCompletionDate(results.getDate("completionDate"));
+				project.setIntendedDate(results.getDate("intendedDate"));
+				project.setDescription(results.getString("description"));
+				
+				projects.add(project);
+		    }
+		    
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return projects;
+	}
+
+	public int getCompleted() {
+		int total = 0;
+		
+		try {
+    		String sql = "SELECT COUNT(*) as total FROM projects WHERE completed='1'";
+		    Statement statement = msCon.getStatement();
+		    
+		    ResultSet results = statement.executeQuery(sql);
+		    
+		    while (results.next()) {
+		    	total = results.getInt("total");
+		    }
+		    
+		    System.out.println(total);
+		    
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return total;
+	}
+
+	public int getIncompleted() {
+		int total = 0;
+		
+		try {
+    		String sql = "SELECT COUNT(*) as total FROM projects WHERE completed='0'";
+		    Statement statement = msCon.getStatement();
+		    
+		    ResultSet results = statement.executeQuery(sql);
+		    
+		    while (results.next()) {
+		    	total = results.getInt("total");
+		    }
+		    
+		    System.out.println(total);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return total;
 	}					
 }
