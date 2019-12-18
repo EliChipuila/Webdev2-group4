@@ -40,9 +40,16 @@ We were tasked to design and implement a web-based coursework scheduling applica
  ** Eclipse
  ** TomCat
  
+ 
+## How to run the app
+To be added by Ticio
+
+ 
 ## Author Declaration
 
 We declare that all work submitted for this coursework is the joint work of Cyrose, Ellen, Ticio, Ghislain and Eli alone unless otherwise stated.
+  
+  
   
 
 
