@@ -1,20 +1,18 @@
 package model;
 
-import java.sql.Date;
-
 public class Project { 
 	private int id;
 	private String name;
 	private String description;
-	private java.sql.Date completionDate;
-	private java.sql.Date intendedDate;
+	private String completionDate;
+	private String intendedDate;
 	private int user_id;
 	private int completed;
 	private int status_id;
 	private int modules_id;
 	
 	
-	public Project(int id, String description, String name, Date completionDate, Date intendedDate, int user_id, int completed,
+	public Project(int id, String description, String name, String completionDate, String intendedDate, int user_id, int completed,
 			int status_id, int modules_id) {
 		super();
 		this.id = id;
@@ -30,7 +28,7 @@ public class Project {
 	
 	
 	
-	public Project(String name, String description, Date completionDate, Date intendedDate, int user_id, int completed,
+	public Project(String name, String description, String completionDate, String intendedDate, int user_id, int completed,
 			int status_id, int modules_id) {
 		super();
 		this.name = name;
@@ -63,19 +61,19 @@ public class Project {
 		this.name = name;
 	}
 	
-	public Date getCompletionDate() {
+	public String getCompletionDate() {
 		return completionDate;
 	}
 	
-	public void setCompletionDate(Date completionDate) {
+	public void setCompletionDate(String completionDate) {
 		this.completionDate = completionDate;
 	}
 	
-	public Date getIntendedDate() {
+	public String getIntendedDate() {
 		return intendedDate;
 	}
 	
-	public void setIntendedDate(Date intendedDate) {
+	public void setIntendedDate(String intendedDate) {
 		this.intendedDate = intendedDate;
 	}
 	
@@ -117,14 +115,5 @@ public class Project {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-
-
-	@Override
-	public String toString() {
-		return "Project [id=" + id + ", name=" + name + ", description=" + description + ", completionDate="
-				+ completionDate + ", intendedDate=" + intendedDate + ", user_id=" + user_id + ", completed="
-				+ completed + ", status_id=" + status_id + ", modules_id=" + modules_id + "]";
 	}
 }

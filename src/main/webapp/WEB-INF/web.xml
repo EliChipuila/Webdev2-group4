@@ -35,13 +35,6 @@
     	<servlet-name>ProjectController</servlet-name>
     	<servlet-class>controller.ProjectController</servlet-class>
     </servlet>
-    <servlet>
-    	<description>
-    	</description>
-    	<display-name>LogoutController</display-name>
-    	<servlet-name>LogoutController</servlet-name>
-    	<servlet-class>controller.LogoutController</servlet-class>
-    </servlet>
 	
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -58,9 +51,5 @@
     <servlet-mapping>
     	<servlet-name>ProjectController</servlet-name>
     	<url-pattern>/ProjectController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-    	<servlet-name>LogoutController</servlet-name>
-    	<url-pattern>/LogoutController</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,9 +52,9 @@ public class ProjectController extends HttpServlet {
 	        	update(request, response);
 	        }
         }
+
 	}
 	
-	//Do method to manage all the get requests from the view
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session=req.getSession();
@@ -63,6 +63,7 @@ public class ProjectController extends HttpServlet {
 		if(user == null) {
 			resp.sendRedirect("/login");
 		}else {
+
 			int operation = -1;
 			
 			if(req.getParameter("operation") != null)
@@ -90,15 +91,41 @@ public class ProjectController extends HttpServlet {
 		        ArrayList<Project> projects = projectDAO.getProjectsByUserId(user.id);
 		        
 		        session.setAttribute("milestones", milestones);
+
+			Operations enOp = (Operations) session.getAttribute("operation");
+			int operation = 0;
+			
+			if(enOp == null) {
+				operation = Integer.parseInt(req.getParameter("operation"));
+			}else {
+				operation = enOp.ordinal();
+			}
+			
+			if(operation == Operations.CREATE.ordinal()) {
+		        ModuleDAO moduleDAO = new ModuleDAO();
+		        ArrayList<Module> modules = moduleDAO.getModules(user.id);
+		        
+		        ProjectDAO projectDAO = new ProjectDAO();
+		        ArrayList<Project> projects = projectDAO.getProjectsByUserId(user.id);
+		        
+
 		        session.setAttribute("modules", modules);
 		        session.setAttribute("projects", projects);
 		        
 		        req.getRequestDispatcher("project.jsp").forward(req, resp);
+
 	        }		
+
+	        }else {
+	        	String str[] = req.getHeader("referer").split("/");
+	        	resp.sendRedirect(""+str[str.length-1].toString());
+	        }
+
 		}
 	}
 	
 	private void remove(HttpServletRequest request, HttpServletResponse response) {
+
 		int project_id = Integer.parseInt(request.getParameter("project_id"));
 		
 		Project project = new Project();
@@ -125,18 +152,22 @@ public class ProjectController extends HttpServlet {
 		ArrayList<Project> projects = projectDAO.getProjectsByModuleId(modules_id);
         
         
+
 	}
 	
 	private void update(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session=request.getSession();
 		User user = (User) session.getAttribute("user");
 		
+
 		int project_id = Integer.parseInt(request.getParameter("project_id"));
+
 		String name = request.getParameter("name");
         String completionDate = request.getParameter("completionDate");
         String intendedDate = request.getParameter("intendedDate");
         String description = request.getParameter("description");
         int user_id = user.id;
+
         int status_id = 1;
         int module_id = Integer.parseInt(request.getParameter("modules_id"));
         String completed = request.getParameter("completed");
@@ -163,6 +194,27 @@ public class ProjectController extends HttpServlet {
         if(updated) {
         	try {
 				response.sendRedirect("/project");
+
+        int completed = 0;
+        int status_id = 1;
+        int module_id = Integer.parseInt(request.getParameter("module_id"));
+		
+		Project project = new Project(name, description, completionDate, intendedDate, user_id, completed, status_id, module_id);
+		
+        ProjectDAO projectDAO = new ProjectDAO();
+        boolean updated = projectDAO.updateProject(project);
+        
+        ArrayList<Project> projects = projectDAO.getProjects(user.id);
+        
+        session.setAttribute("projects", projects);
+        session.setAttribute("operation", Operations.VIEW);
+        
+        if(updated) {
+        	try {
+				request.getRequestDispatcher("project.jsp").forward(request, response);
+			} catch (ServletException e) {
+				e.printStackTrace();
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -177,6 +229,7 @@ public class ProjectController extends HttpServlet {
 		
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
+
         int user_id = user.getId();
         int completed = 0;
         int status_id = 1;
@@ -206,6 +259,41 @@ public class ProjectController extends HttpServlet {
         	try {
 				response.sendRedirect("/project");
 			} catch (IOException e) {
+
+        String completionDate = request.getParameter("completionDate");
+        String intendedDate = request.getParameter("intendedDate");
+        int user_id = user.id;
+        int completed = 0;
+        int status_id = 1;
+        int module_id = Integer.parseInt(request.getParameter("modules_id"));
+        
+//      this.id = id;
+//		this.name = name;
+//		this.completionDate = completionDate;
+//		this.intendedDate = intendedDate;
+//		this.user_id = user_id;
+//		this.completed = completed;
+//		this.status_id = status_id;
+//		this.modules_id = modules_id;
+        
+        Project project = new Project(name, description, completionDate, intendedDate, user_id, completed, status_id, module_id);      
+        ProjectDAO projectDAO = new ProjectDAO();
+        boolean registered = projectDAO.registerProject(project);
+        
+        ArrayList<Project> projects = projectDAO.getProjects(module_id);
+        
+        session.setAttribute("projects", projects);
+        session.setAttribute("operation", Operations.VIEW);
+        
+        if(registered) {
+        	try {
+				request.getRequestDispatcher("project.jsp").forward(request, response);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
     	}else {

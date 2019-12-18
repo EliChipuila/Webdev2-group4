@@ -42,9 +42,14 @@ public class UserDAO {
 		    Statement statement = msCon.getStatement();
 		    
 		    System.out.println("SQL Statement: "+sql);
+		    System.out.println("ola: "+statement.toString());
 		    
 		    ResultSet results = statement.executeQuery(sql);
-		 
+		    
+//		    System.out.println(results.getFetchSize());
+		    
+		    
+		    
 		    if(results.first()) {
 		    	user = new User();
 		    	user.setName(results.getString("name"));

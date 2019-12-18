@@ -14,12 +14,10 @@ import javax.swing.JOptionPane;
 import org.apache.catalina.connector.Response;
 
 import dao.ModuleDAO;
-import dao.ProjectDAO;
 import dao.UserDAO;
 import model.Module;
 import model.User;
 import model.Operations;
-import model.Project;
 
 /**
  * Servlet implementation class ModuleController
@@ -59,32 +57,32 @@ public class ModuleController extends HttpServlet {
 		if(user == null) {
 			resp.sendRedirect("/login");
 		}else {
-			ModuleDAO moduleDAO = new ModuleDAO();
-	        ArrayList<Module> modules = moduleDAO.getModules(user.id);
-	        
-	        session.setAttribute("modules", modules);
-	        req.getRequestDispatcher("create_module.jsp").forward(req, resp);
+			Operations enOp = (Operations) session.getAttribute("operation");
+			int operation = 0;
+			
+			if(enOp == null) {
+				operation = Integer.parseInt(req.getParameter("operation"));
+			}else {
+				operation = enOp.ordinal();
+			}
+			
+			if(operation == Operations.CREATE.ordinal()) {
+				ModuleDAO moduleDAO = new ModuleDAO();
+		        ArrayList<Module> modules = moduleDAO.getModules(user.id);
+		        
+		        session.setAttribute("modules", modules);
+//		        session.setAttribute("operation", Operations.VIEW);
+		        
+		        req.getRequestDispatcher("create_module.jsp").forward(req, resp);
+	        }else {
+	        	String str[] = req.getHeader("referer").split("/");
+	        	resp.sendRedirect(""+str[str.length-1].toString());
+	        }
 		}
 	}
 	
 	private void remove(HttpServletRequest request, HttpServletResponse response) {
-		int module_id = Integer.parseInt(request.getParameter("module_id"));
 		
-		Module module = new Module();
-		ModuleDAO moduleDAO = new ModuleDAO();
-        
-		module.setId(module_id);
-        boolean removed = moduleDAO.removeModule(module);
-        
-        if(removed) {
-        	try {
-				response.sendRedirect("/module");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-    	}else {
-    		JOptionPane.showMessageDialog(null, "Error registering the user try again");
-    	}
 	}
 	
 	private void update(HttpServletRequest request, HttpServletResponse response) {
@@ -108,8 +106,10 @@ public class ModuleController extends HttpServlet {
         	try {
 				request.getRequestDispatcher("create_module.jsp").forward(request, response);
 			} catch (ServletException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     	}else {
@@ -128,6 +128,7 @@ public class ModuleController extends HttpServlet {
         ModuleDAO moduleDAO = new ModuleDAO();
         boolean registered = moduleDAO.registerModule(module);
         
+        
         ArrayList<Module> modules = moduleDAO.getModules(user.id);
         
         session.setAttribute("modules", modules);
@@ -137,8 +138,10 @@ public class ModuleController extends HttpServlet {
         	try {
 				request.getRequestDispatcher("create_module.jsp").forward(request, response);
 			} catch (ServletException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     	}else {

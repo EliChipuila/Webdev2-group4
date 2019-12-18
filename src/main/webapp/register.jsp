@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
-                                <input type="checkbox" id="agreeTerms" name="terms" value="agree" required>
+                                <input type="checkbox" id="agreeTerms" name="terms" value="agree">
                                 <label for="agreeTerms">
                                     I agree to the <a href="#">terms</a>
                                 </label>
@@ -76,7 +76,19 @@
                     </div>
                 </form>
 
-                <a href="/login" class="text-center">I already have an account! <b>login</b></a>
+                <div class="social-auth-links text-center">
+                    <p>- OR -</p>
+                    <a href="#" class="btn btn-block btn-primary">
+                        <i class="fab fa-facebook mr-2"></i>
+                        Sign up using Facebook
+                    </a>
+                    <a href="#" class="btn btn-block btn-danger">
+                        <i class="fab fa-google-plus mr-2"></i>
+                        Sign up using Google+
+                    </a>
+                </div>
+
+                <a href="login.jsp" class="text-center">I already have a membership</a>
             </div>
             <!-- /.form-box -->
             </div><!-- /.card -->
