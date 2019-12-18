@@ -14,7 +14,7 @@ public class ModuleDAO {
 	private MysqlCon msCon;
 	
 	public ModuleDAO() {
-		msCon = new MysqlCon("webdevcw", "root", "");
+		msCon = new MysqlCon("webcw", "root", "");
 	}
 	
 	public boolean registerModule(Module module) {
@@ -27,12 +27,11 @@ public class ModuleDAO {
             pstmt.setInt(3, module.getStatus_id());
             pstmt.setInt(4, module.getUser_id());
             
-            pstmt.executeUpdate();	    
+            pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}finally {
-//			msCon.close();
 		}
 		
 		return true;
@@ -40,7 +39,6 @@ public class ModuleDAO {
 	
 	public boolean updateModule(Module module) {
 		try {
-			
 			String sql = "UPDATE modules SET name='"+module.getName()+"', description='"+module.getDescription()+"' WHERE id='"+module.getId()+"'";
 		    PreparedStatement pstmt = msCon.getPreparedStatement(sql);
 		    
@@ -49,7 +47,6 @@ public class ModuleDAO {
 			e.printStackTrace();
 			return false;
 		}finally {
-//			msCon.close();
 		}
 		
 		return true;
@@ -59,7 +56,6 @@ public class ModuleDAO {
 		ArrayList<Module> modules = new ArrayList<Module>();
 		Module module = null;
 		
-		
 		try {
     		String sql = "SELECT * FROM modules WHERE user_id='"+user_id+"' ORDER BY id DESC";
 		    Statement statement = msCon.getStatement();
@@ -67,7 +63,6 @@ public class ModuleDAO {
 		    
 		    while (results.next()) {
 				module = new Module();
-				
 				module.setName(results.getString("name"));
 				module.setDescription(results.getString("description"));
 				module.setId(results.getInt("id"));
@@ -105,5 +100,40 @@ public class ModuleDAO {
 		}
 		
 		return module;
+	}
+
+	public boolean removeModule(Module module) {
+		String sql = "DELETE FROM modules WHERE id = ?";
+		
+		try {
+		    PreparedStatement pstmt = msCon.getPreparedStatement(sql);
+	        pstmt.setInt(1, module.getId());
+            pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}finally {}
+	    
+		return true;
+	}
+
+	public int getTotal() {
+		int total = 0;
+		
+		try {
+    		String sql = "SELECT COUNT(*) as total FROM modules";
+		    Statement statement = msCon.getStatement();
+		    
+		    ResultSet results = statement.executeQuery(sql);
+		    
+		    while (results.next()) {
+			    total = results.getInt("total");
+		    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return total;
 	}					
 }

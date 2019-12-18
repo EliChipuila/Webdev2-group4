@@ -19,7 +19,8 @@ private MysqlCon msCon;
 	
 	public boolean registerProject(Project project) {
 		try {
-    		String sql = "INSERT INTO projects(name, completed, status_id, modules_id, completionDate, intendedDate, description, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+    		String sql = "INSERT INTO projects(name, completed, status_id, modules_id, completionDate, intendedDate, description, user_id) "
+    				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 		    PreparedStatement pstmt = msCon.getPreparedStatement(sql);
 		    
             pstmt.setString(1, project.getName());

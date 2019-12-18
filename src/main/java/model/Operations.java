@@ -4,5 +4,6 @@ public enum Operations {
 	REMOVE,
     UPDATE,
     CREATE,
-    VIEW
+    VIEW,
+    PROJECTS_BY_MODULE
 }
