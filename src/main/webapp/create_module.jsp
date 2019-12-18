@@ -32,8 +32,8 @@
 	        <div class="content-wrapper">
 	        <!-- Main content -->
 	    <section class="content pt-3">
-	      <div class="container-fluid">
-	        <div class="row">
+	      <div class="container-fluid pt-5">
+	          <div class="row">
 	        	<div class="col-md-8">
 	            	<div class="card">
 				    	<div class="card-header p-2">
@@ -48,7 +48,7 @@
 				                    	<div class="form-group row">
 				                        	<label for="inputName" class="col-sm-2 col-form-label">Name</label>
 				                        	<div class="col-sm-10">
-				                            	<input type="text" class="form-control" name="name" id="inputName" placeholder="Name">
+				                            	<input type="text" class="form-control" name="name" id="inputName" placeholder="Name" required>
 				                        	</div>
 				                    	</div>
 				                    	
@@ -57,9 +57,9 @@
 				                    	<input type="hidden" class="form-control" name="operation" id="operation" value="<%= operation.ordinal() %>">
 				                  		
 				                    	<div class="form-group row">
-				                        	<label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
+				                        	<label for="inputExperience" class="col-sm-2 col-form-label">Description</label>
 				                        	<div class="col-sm-10">
-				                            	<textarea class="form-control" name="description" id="inputExperience" placeholder="Description"></textarea>
+				                            	<textarea class="form-control" name="description" id="inputExperience" placeholder="Description" required></textarea>
 				                        	</div>
 				                   	 	</div>
 				                   
@@ -76,25 +76,32 @@
 				        <!-- /.tab-content -->
 				    </div><!-- /.card-body -->
 				</div>
-	<!-- /.nav-tabs-custom -->
 	          </div>
+
 	          <div class="col-md-4">
 	          	<div class="card card-default">
-				    <div class="card-header mb-1">
-				        <h3 class="card-title">
-				            <i class="fa fa-book"></i>
-				            Modules
-				        </h3>
-				    </div>
-				    <!-- /.card-header -->
+                    	<div class="card-header mb-1">
+					        <h3 class="card-title">
+					            <i class="fa fa-bookmark"></i>
+					            Modules
+					        </h3>
+					    </div>
 				    	
 				    	<% ArrayList<Module> modules = (ArrayList<Module>) session.getAttribute("modules"); %>
 										    	
 				    	<c:forEach var="module" items="${modules}">
 				    		<div class="card-body pb-0 pt-1">
 					    		<div class="callout callout-danger">
-						            <h5><b>${module.name}</b></h5>
-						            <p>${module.description}</p>
+					    			<form class="time" id="form-${module.id}" method="get" action="/project">
+				                        <input type="hidden" name="modules_id" value="${module.id}">
+				                        <input type="hidden" name="operation" value="<%= Operations.PROJECTS_BY_MODULE.ordinal() %>">
+				                        
+				                        <a href="#" class="text-primary" onclick="document.getElementById('form-${module.id}').submit(); return false;">
+						            		<h5><b>${module.name}</b></h5>
+									    </a>
+				                    </form>
+
+						            <p class="text-justify">${module.description}</p>
 						            
 						            <div style="display: block; position: relative;">
 							            <div class="btn-group btn-group-sm pull-right" style="float: right; clear: both; bottom: 16px;">
@@ -144,14 +151,15 @@
 										      
 					                        <a href="#" class="btn btn-info" data-toggle="modal" data-target="#edit-modal-sm${module.id}"><i class="fa fa-edit" style="color: #fff !important"></i></a>
 					                        
-					                        
-					                        
-					                        <a href="#" class="btn btn-danger"><i class="fas fa-trash" style="color: #fff !important"></i></a>
+					                        <form action="/module" method="post" id="remove-pr${module.id}">
+	                                            <input type="hidden" name="operation" value="<%= Operations.REMOVE.ordinal() %>">
+	                                            <input type="hidden" name="module_id" value="${module.id}">
+	                                        </form>
+
+					                        <a href="#" onclick="document.getElementById('remove-pr${module.id}').submit(); return false;" class="btn btn-danger" ><i class="fas fa-trash" style="color: #fff !important"></i></a>
 					                    </div>
 				                    </div>
 						        </div>
-						        
-						        
 					        </div>
 				    	</c:forEach>
 
